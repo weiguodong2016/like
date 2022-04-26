@@ -1,8 +1,11 @@
 package test;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
+import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import org.springframework.util.ResourceUtils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -152,7 +155,7 @@ public class PersonUtils {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String filePath =  ResourceUtils.getURL("classpath:").getPath().toString() +"交友匹配.xlsx";
+        String filePath =  ResourceUtils.getURL("classpath:").getPath().toString() +"交友匹配模板.xlsx";
         List<PersonExcel> list = EasyExcel.read(filePath).head(PersonExcel.class).sheet().doReadSync();
         if (list == null && list.size() == 0) {
             return;
@@ -180,9 +183,14 @@ public class PersonUtils {
 
         PersonUtils personUtils = new PersonUtils();
         List<PiPeiExcel> piPeiExcels = personUtils.getString(personList);
-        System.out.println(piPeiExcels);
-        filePath =  ResourceUtils.getURL("classpath:").getPath().toString() +"交友匹配1.xlsx";
-        EasyExcel.write(filePath, PiPeiExcel.class).sheet(2, "输出").doWrite(piPeiExcels);
+
+        String destPath =  ResourceUtils.getURL("classpath:").getPath().toString() + "交友匹配.xlsx";
+
+        // 生成工作簿对象
+        ExcelWriterBuilder workBookWriter = EasyExcel.write(new File(destPath)).withTemplate(filePath);
+        // 创建工作表对象
+        ExcelWriterSheetBuilder sheet = workBookWriter.sheet("输出");
+        sheet.doFill(piPeiExcels);
     }
 
 }
