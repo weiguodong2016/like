@@ -24,9 +24,14 @@ public class PersonUtils {
         }
     }
 
-    public void setPiPeiExcels(List<PiPeiExcel> piPeiExcels, String from, String to, int turnNum, Map<String, PiPeiExcel> piPeiMap) {
+    public void setPiPeiExcels(List<PiPeiExcel> piPeiExcels, String from, String to, int turnNum, Map<String, PiPeiExcel> piPeiMap, List<String> piPis) {
         dealData(piPeiExcels, from, to, turnNum, piPeiMap);
         dealData(piPeiExcels, to, from, turnNum, piPeiMap);
+        if (from.compareTo(to) > 0) {
+            piPis.add(to + from);
+        } else {
+            piPis.add(from + to);
+        }
     }
 
     private void setTo(PiPeiExcel piPeiExcel, String to, int turnNum) {
@@ -76,8 +81,10 @@ public class PersonUtils {
         PiPeiExcel jiLu = new PiPeiExcel(); //记录每轮匹配次数
         jiLu.setSt("每轮匹配队数");
         int num = personList.size();
+        List<String> piPeiReS = new ArrayList<>(10); //10次匹配结果 用于判断没有重复结果
         List<PiPeiExcel> piPeiExcels = new ArrayList<>(personList.size() + 1);
         for (; turnNum < 10; turnNum++) {
+            List<String> piPis = new ArrayList<String>(personList.size()); //
             int piPeiNum = 0;
             Map<String, Person> personMap = new HashMap<>(num);
             //根据id放进map
@@ -98,7 +105,7 @@ public class PersonUtils {
                         likePerson = personMap.get(likes.get(j));
                         if (likePerson != null) {
                             if (new Random().nextInt(8) > 5 && !likePerson.isMatched() && likePerson.getLikeIds().contains(cPerson.getId())) { //二个都喜欢
-                                setPiPeiExcels(piPeiExcels, cPerson.getId(), likePerson.getId(), turnNum, piPeiMap);
+                                setPiPeiExcels(piPeiExcels, cPerson.getId(), likePerson.getId(), turnNum, piPeiMap, piPis);
                                 personMap.remove(cPerson.getId());
                                 personMap.remove(likePerson.getId());
                                 cPerson.setMatched(true);
@@ -127,13 +134,27 @@ public class PersonUtils {
                         from = randomValue;
                     } else {
                         to = randomValue;
-                        setPiPeiExcels(piPeiExcels, from, to, turnNum, piPeiMap);
+                        setPiPeiExcels(piPeiExcels, from, to, turnNum, piPeiMap, piPis);
                     }
 
                 }
             }
 
             setTo(jiLu, String.valueOf(piPeiNum), turnNum);
+
+            piPis.sort(Comparator.naturalOrder());
+
+            String result = piPis.toString();
+
+            if (piPeiReS.contains(result)) {
+                System.out.println("重复结果了");
+                turnNum --; //这轮不算
+                continue;
+            } else  {
+                piPeiReS.add(result);
+                piPeiReS.contains(result);
+            }
+
             for (Person p :  personList) {
                 p.setMatched(false);
             }
