@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data                //生成getter,setter ,toString等函数
 @NoArgsConstructor   //生成无参构造函数
 @AllArgsConstructor //生成全参数构造函数
-public class PersonExcel {
+public class StudentExcel {
 
     @ExcelProperty(value = "学生")
     private String st;

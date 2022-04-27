@@ -2,7 +2,7 @@ package test;
 
 import java.util.List;
 
-public class Person {
+public class Student {
 
     private String id;
     private List likeIds;
@@ -34,7 +34,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "Student{" +
                 "id=" + id +
                 ", likeIds=" + likeIds +
                 ", matched=" + matched +

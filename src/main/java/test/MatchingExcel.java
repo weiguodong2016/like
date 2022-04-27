@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data                //生成getter,setter ,toString等函数
 @NoArgsConstructor   //生成无参构造函数
 @AllArgsConstructor //生成全参数构造函数
-public class PiPeiExcel {
+public class MatchingExcel {
 
     @ExcelProperty(value = "学生")
     private String st;
@@ -47,7 +47,7 @@ public class PiPeiExcel {
     private String round10;
 
     public boolean equals(Object anObject) {
-        return (this.st == ((PiPeiExcel)anObject).st);
+        return (this.st == ((MatchingExcel)anObject).st);
     }
 
     public int hashCode() {
